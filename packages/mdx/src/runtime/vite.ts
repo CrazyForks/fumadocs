@@ -9,7 +9,6 @@ import type {
   VirtualFile,
 } from 'fumadocs-core/source';
 import type { CompiledMDXProperties } from '@/utils/build-mdx';
-import path from 'node:path';
 
 export type CompiledMDXFile<Frontmatter> = CompiledMDXProperties<Frontmatter> &
   Record<string, unknown>;
@@ -160,6 +159,7 @@ export function fromConfig<Config>(): {
       } as any;
     },
     async sourceAsync(doc, meta) {
+      const path = await import('node:path');
       const virtualFiles: Promise<VirtualFile>[] = [
         ...Object.entries(doc).map(async ([file, content]) => {
           return {
@@ -182,6 +182,7 @@ export function fromConfig<Config>(): {
       return { files: await Promise.all(virtualFiles) };
     },
     async sourceLazy(doc, meta) {
+      const path = await import('node:path');
       const virtualFiles: Promise<VirtualFile>[] = [
         ...Object.entries(doc.head).map(async ([file, frontmatter]) => {
           return {
